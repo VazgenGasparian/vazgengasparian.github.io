@@ -97,13 +97,14 @@
 </head>
 <body>
 <div id="wrapper">
-    <div style="width:100%; display: flex" id="myIdDiv"><span>My id: </span><input style="flex:2" id="myId" readonly type="text"><button id="copyButton">Copy</button></div>
+    <div style="width:100%; display: flex" id="myIdDiv"><span >My id: </span><input style="flex:2" id="myId" readonly type="text"><button id="copyButton">Copy</button></div>
+    <div style="width:100%; display: flex" id="myLinkDiv"><span >Link: </span><input style="flex:2" id="myLink" readonly type="text"><button id="copyLinkButton">Copy</button></div>
 
-    <div style="width:100%; display: flex" id="connectDiv"><button id="pasteButton">Paste</button><input style="flex:2" style="width:20em" id="peerIdField"><button id="connectToButton">Connect</button></div>
+    <div style="width:100%; display:flex " id="connectDiv"><button id="pasteButton">Paste</button><input style="flex:2" style="width:20em" id="peerIdField"><button id="connectToButton">Connect</button></div>
     <div style="width:100%; display: none"  id="connectedDiv"> <span>&nbspPeer:</span><input style="flex:2"  id="peerId" disabled readonly style="width:20em" type="text"></div>
 
     <div id="sendDiv" style="display:none">
-        <div id="textDiv" class="container" style=" position:absolute; width:calc(100% - 1em); height:calc( 100% - 7em); overflow-y:scroll">
+        <div id="textDiv" class="container" style=" position:absolute; width:calc(100% - 1em); height:calc( 100% - 5em); overflow-y:scroll">
             <div id="textContentDiv"></div>
             <div>
                 <div hidden id="tentativeLeft" class="bubble left-bubble tentative" ></div>
@@ -117,8 +118,24 @@
 </body>
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <script>
-    document.getElementById('copyButton').onclick=()=>{
+    const search = window.location.search;
+    const spr = (search.length>0) ? window.location.search.split('?') : [];
+    const searchParams = spr.length > 0 ? spr[1].split('&') : [];
+    console.log(searchParams);
+
+
+    document.getElementById('copyButton').onclick=()=> {
         let copyText = document.getElementById("myId");
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+    }
+    document.getElementById('copyLinkButton').onclick=()=>{
+        let copyText = document.getElementById("myLink");
 
         // Select the text field
         copyText.select();
@@ -144,6 +161,13 @@
         pingButton.style.backgroundColor="hsl("+hue+",100%,50%)";
     }
 
+    function connect(){
+        let conn = peer.connect(document.getElementById('peerIdField').value);
+        conn.on('open', function() {
+            onConn(conn);
+        });
+    }
+
 
     let myId;
     const peer = new Peer();
@@ -151,6 +175,11 @@
         myId=id;
         console.log('My peer ID is: ' + id);
         document.getElementById('myId').value= id;
+        document.getElementById('myLink').value= window.location.href+'?'+id;
+        if(searchParams.length>0) {
+            document.getElementById('peerIdField').value=searchParams[0];
+            connect();
+        }
 
     });
 
@@ -243,12 +272,14 @@
     }
 
     function onConn(conn) {
-
+        console.log('onCOnn');
         sendPing(conn, Math.random()*250);
 
         conn.on('data', (data)=>handleDataMessage(data));
-        document.getElementById('myId').disabled = true;
-        document.getElementById('copyButton').hidden = true;
+        document.getElementById('myIdDiv').style.display = 'none';
+        document.getElementById('myLinkDiv').style.display = 'none';
+        // document.getElementById('myId').disabled = true;
+        // document.getElementById('copyButton').hidden = true;
         document.getElementById('connectDiv').style.display = 'none';
         document.getElementById('connectedDiv').style.display = 'flex';
         document.getElementById('sendDiv').style.display = 'block';
@@ -276,12 +307,11 @@
         onConn(conn);
     });
 
-    document.getElementById('connectToButton').onclick=()=>{
-        let conn = peer.connect(document.getElementById('peerIdField').value);
-        conn.on('open', function() {
-            onConn(conn);
-        });
-    }
+
+
+
+
+    document.getElementById('connectToButton').onclick=()=>connect();
 
     function pongSound() {
         var snd = new Audio("data:audio/wav;base64,UklGRvYAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YdIAAAB+AQwDvgMNBC8EPgREBEUERARCBD8EPAQ4BCgEGAQIBPgD5wPWA8UDtAOjA5EDfwNuA1wDSgM4AyYDFAMCA+8C3QLLArkCpgKUAoICcAJeAkwCOgIoAhcCBQL0AeMB0QHAAbABnwGPAX8BbwFfAU8BQAExASIBFAEGAfgA6gDdANAAwwC3AKsAnwCUAIkAfgB0AGoAYABXAE4ARgA+ADYALwAoACIAHAAWABEADAAIAAQAAQD+//v/+f/3//b/9f/0//T/9f/1//f/+P/6//3/AAA="
