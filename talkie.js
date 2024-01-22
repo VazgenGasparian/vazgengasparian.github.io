@@ -28,8 +28,6 @@ peer.on('open', function(id) {
     }
 });
 
-
-
 scrollIndicator.onclick=()=>{
     textDiv.scrollTo(0, textDiv.scrollHeight);
     scrollIndicator.hidden=true;
@@ -40,7 +38,7 @@ textDiv.onscroll=()=>{
 
 function handleDataMessage(data){
     // console.log('Received', data);
-    const obj = JSON.parse(data);
+    const obj = data;
 
     switch(obj.type){
         case 'data':{
@@ -74,11 +72,11 @@ function send(conn, tentative = false) {
         addToMessageHistory(data);
     }
     // console.log(data);
-    conn.send(JSON.stringify({
+    conn.send({
         type:'data',
         tentative: tentative,
         data: data
-    }));
+    });
 
     if(!tentative) {
         textContentDiv.innerHTML += `<div class="bubble right-bubble" >` + data + `</div>`;
