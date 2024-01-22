@@ -1,0 +1,89 @@
+* {
+    font-family: Consolas;
+    font-size:1.2em;
+    /*color: #00ff00;*/
+    /*background-color: black;*/
+}
+.wrapper {
+    padding: 0.5em;
+    box-sizing: border-box;
+}
+
+input, button {
+    background-color:white;
+    border: solid;
+    border-radius: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin:0.25em;
+    border-width: 0.125em;
+}
+input:disabled {
+    border-style:dotted;
+}
+span {
+    margin:0.25em;
+}
+
+.bubble {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    box-sizing: border-box;
+    border: solid;
+    border-width: calc(0.125em / 1.25) ;
+    width: fit-content;
+    max-width: 80%;
+    word-wrap: break-word;
+    border-radius: 0.5em;
+    padding: 0.125em 0.375em;
+
+}
+
+.tentative {
+    border-style: dotted;
+    border-width: calc(0.125em / 1) ;
+}
+
+.right-bubble {
+    margin-left: auto;
+    margin-right: 0.0em;
+    border-right: 0;
+    /*padding-left:0.25em;*/
+
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.left-bubble {
+    border-left: 0;
+    margin-left: 0.0em;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    /*padding-right:0.25em;*/
+}
+
+.container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+
+}
+#textDiv {
+    border:solid;
+    border-width: 0.125em;
+    margin:0.25em;
+    box-sizing: border-box;
+    border-radius: 0.5em;
+}
+#scrollIndicator{
+    background-color:white;
+    border-width: 0.125em;
+    border-bottom:0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: pointer;
+}
+button {
+    cursor: pointer;
+}
+.container::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
