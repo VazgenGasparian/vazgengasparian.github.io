@@ -96,12 +96,12 @@
 
     function loop(){
 
-        const curr = chain.length>0 ? chain[chain.length-nBack] : undefined;
+        const curr = chain.length>0 ? chain[chain.length-1] : undefined;
         const prev = chain.length>1 ? chain[chain.length-1-nBack] : undefined;
         console.log(prev+' '+curr);
         const posSame = prev ? prev.split('')[0]===curr.split('')[0] : false;
         const symSame = prev ? prev.split('')[1]===curr.split('')[1] : false;
-        const  targetValue = 0+posSame+symSame;
+        const  targetValue = 0+(posSame&&(nPos>1))+(symSame&&(symbols.length>1));
         console.log(targetValue);
         if(button===targetValue) {
             streak+=targetValue;
