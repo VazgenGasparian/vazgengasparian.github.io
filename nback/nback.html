@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<style>
+    * {
+        font-family: Consolas;
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+
+        /*
+          Introduced in IE 10.
+          See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+        */
+        -ms-user-select: none;
+        user-select: none;
+
+    }
+    .tile {
+        border: black;
+        border-style: solid;
+        border-width: 2px;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 5px;
+        font-size: x-large;
+    }
+</style>
+<body oncontextmenu="return false;">
+<h2>N-Back Tester🧠</h2>
+<span>N Back: <input id="nBack" value="1" type="number" onchange="init()"></span><br>
+<span>N Pos: &nbsp;<input id="nPos" value="3" type="number" onchange="init()"></span><br>
+<span>Symbols:<input id="symbols" value="ABC" type="text" onchange="init()"></span><br>
+<span>N Sec: &nbsp;<input id="nSec" value="2" type="number" onchange="init()"></span><br>
+<span>Boost: &nbsp;<input id="boost" value="0.25" type="number" onchange="init()"></span><br>
+<br>
+<div id="tileDiv">
+<span class="tile">&nbsp;</span><span class="tile">X</span><span class="tile">&nbsp;</span><br><br><br>
+<span class="tile">&nbsp;</span><span class="tile">&nbsp;</span><span class="tile">&nbsp;</span><br><br><br>
+<span class="tile">&nbsp;</span><span class="tile">&nbsp;</span><span class="tile">&nbsp;</span><br><br><br>
+</div>
+<span>Streak:&nbsp;<input id="streak" value="0" type="number" disabled></span><br>
+<span>Best: &nbsp;&nbsp;<input id="best"  value="0" type="number" disabled></span><br>
+<span>Choice:&nbsp;<input id="choice" value="0" type="number" disabled></span><br>
+</body>
+<script>
+    let button = 0;
+    document.addEventListener('contextmenu', event => {
+        event.preventDefault();
+        console.log('right');
+        if(button<2){
+            button=2;
+            document.getElementById('choice').value=button;
+        }
+    });
+    document.addEventListener('click', event => {
+        event.preventDefault();
+        console.log('left');
+        if(button<2){
+            button++;
+            document.getElementById('choice').value=button;
+        }
+    });
+    let nPos;
+    let nBack;
+    let symbols;
+    let nSec;
+    let boost;
+    let sqrtNPos;
+    const tileDiv = document.getElementById('tileDiv');
+    let chain = [];
+    let streak = 0;
+    let best=0;
+    function init(){
+        nPos = Number(document.getElementById('nPos').value);
+        nBack = Number(document.getElementById('nBack').value);
+        symbols = document.getElementById('symbols').value.split('').filter(x=>x!=='');
+        nSec = Number(document.getElementById('nSec').value);
+        boost = Number(document.getElementById('boost').value);
+        sqrtNPos = Math.max(3,Math.ceil(Math.sqrt(nPos)));
+        console.log(nPos);
+        console.log(nBack);
+        console.log(symbols);
+        console.log(nSec);
+        console.log(sqrtNPos);
+        tileDiv.innerHTML='';
+        for(let i = 0; i < nPos; i++){
+            tileDiv.innerHTML+='<span id="tile'+i+'" class="tile">&nbsp;</span>';
+            if(i!==0 && (i+1)%sqrtNPos===0) tileDiv.innerHTML+='<br><br>';
+        }
+        if(nPos%sqrtNPos!==0)tileDiv.innerHTML+='<br><br>';
+        chain = [];
+        streak=0;
+        best=0;
+    }
+    init();
+
+    function loop(){
+
+        const curr = chain.length>0 ? chain[chain.length-nBack] : undefined;
+        const prev = chain.length>1 ? chain[chain.length-1-nBack] : undefined;
+        console.log(prev+' '+curr);
+        const posSame = prev ? prev.split('')[0]===curr.split('')[0] : false;
+        const symSame = prev ? prev.split('')[1]===curr.split('')[1] : false;
+        const  targetValue = 0+posSame+symSame;
+        console.log(targetValue);
+        if(button===targetValue) {
+            streak+=targetValue;
+            best = Math.max(streak, best);
+        }
+        else {
+            streak = 0;
+        }
+        document.getElementById('streak').value =streak;
+        document.getElementById('best').value =best;
+
+        button=0;
+        document.getElementById('choice').value=button;
+
+        Array.from(tileDiv.children).forEach(child=>child.innerHTML='&nbsp;');
+        setTimeout(()=>{
+            const prev = chain.length>1 ? chain[chain.length-nBack] : undefined;
+            let nextPos = Math.floor(Math.random()*nPos);
+            if(prev && Math.random() < boost) {
+                nextPos = Number(prev.split('')[0]);
+            }
+            let nextSym = symbols[Math.floor(Math.random()*symbols.length)];
+            if(prev && Math.random() < boost) {
+                nextSym = prev.split('')[1];
+            }
+            document.getElementById('tile'+nextPos).innerHTML=nextSym;
+            const entry = nextPos+''+nextSym;
+            chain.push(entry);
+        }, nSec*250);
+
+        setTimeout(loop, nSec*1000);
+    }
+    loop();
+</script>
+</html>
