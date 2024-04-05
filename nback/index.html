@@ -31,7 +31,7 @@
 <span>N Pos: &nbsp;<input id="nPos" value="3" type="number" onchange="init()"></span><br>
 <span>Symbols:<input id="symbols" value="ABC" type="text" onchange="init()"></span><br>
 <span>N Sec: &nbsp;<input id="nSec" value="2" type="number" onchange="init()"></span><br>
-<span>Boost: &nbsp;<input id="boost" value="0.25" type="number" onchange="init()"></span><br>
+<span>Boost: &nbsp;<input id="boost" value="0" type="number" onchange="init()"></span><br>
 <br>
 <div id="tileDiv">
 <span class="tile">&nbsp;</span><span class="tile">X</span><span class="tile">&nbsp;</span><br><br><br>
@@ -120,11 +120,11 @@
         setTimeout(()=>{
             const prev = chain.length>1 ? chain[chain.length-nBack] : undefined;
             let nextPos = Math.floor(Math.random()*nPos);
-            if(prev && Math.random() < boost) {
+            if(prev && Math.random() < boost - 1/nPos) {
                 nextPos = Number(prev.split('')[0]);
             }
             let nextSym = symbols[Math.floor(Math.random()*symbols.length)];
-            if(prev && Math.random() < boost) {
+            if(prev && Math.random() < boost - 1/symbols.length) {
                 nextSym = prev.split('')[1];
             }
             document.getElementById('tile'+nextPos).innerHTML=nextSym;
