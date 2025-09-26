@@ -2,9 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Rocketeer</title>
 </head>
-<body>
+<body style="margin: 50px; font-family: Consolas">
+<div>Rocketeer</div>
+<br>
+<input id="balance" disabled type="number" value = "3000.00"><span>&nbspUSD</span>
+<br>
+<br>
+<span id="multiplierDiv"></span>
+<button onclick="multiplier=1">reset</button>
+<br>
+<br>
+<input id="exponent" type="number" value = "1.001">
+<input id="multiplyCheck" type="checkbox"><span>multiply</span>
+<br>
+<br>
+<button onclick="
+let val = Number(document.getElementById('bet').value);
+val-=0.1;
+if(val < 0) val = 0;
+val = val.toFixed(2);
+document.getElementById('bet').value = val;
+">-</button>
+<input id="bet" type="number" value = "1.00">
+<button onclick="
+let val = Number(document.getElementById('bet').value);
+val+=0.1;
+val = val.toFixed(2);
+document.getElementById('bet').value = val;
+">+</button>
+<br>
+<br>
+<button onclick="document.getElementById('bet').value = '1.00'">1</button>
+<button onclick="document.getElementById('bet').value = '2.00'">2</button>
+<button onclick="document.getElementById('bet').value = '5.00'">5</button>
+<button onclick="document.getElementById('bet').value = '10.00'">10</button>
+<br>
+<br>
+<button id="placeBet" onclick="
+    if(placedBet === 0){
+            document.getElementById('balance').value = (document.getElementById('balance').value - document.getElementById('bet').value).toFixed(2);
+            placedBet = document.getElementById('bet').value;
+    } else {
+            document.getElementById('balance').value = (Number(document.getElementById('balance').value) + placedBet * multiplier).toFixed(2);
+            placedBet = 0;
+    }
 
+"></button>
 </body>
+
+<script>
+    window.placedBet = 0;
+    window.multiplier = 1;
+    setInterval(()=> {
+        const multiplierDiv = document.getElementById('multiplierDiv');
+        multiplierDiv.innerText = ''+multiplier.toFixed(2)+'x';
+    }, 100);
+
+    setInterval(()=> {
+        if(document.getElementById('multiplyCheck').checked){
+            multiplier *= document.getElementById('exponent').value;
+        }
+    }, 10);
+
+    setInterval(()=> {
+        document.getElementById('placeBet').innerText =
+            (window.placedBet===0)
+                ? 'Bet ' +document.getElementById('bet').value+' USD'
+                : 'Cash Out ' +(placedBet * multiplier).toFixed(2) +' USD';
+    }, 10);
+
+</script>
 </html>
