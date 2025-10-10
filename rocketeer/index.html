@@ -9,9 +9,14 @@
             -moz-box-sizing: border-box;
             -webkit-box-sizing: border-box;
         }
+        body {
+            font-family: Consolas;
+            margin:0px;
+            font-size: xx-large;
+        }
     </style>
 </head>
-<body style="font-family: Consolas; margin:0px">
+<body>
 
 <div style="position:absolute;left:0px;top:0px;border: 2px solid black;height:10%;width:100%;  padding:15px">
     <span>Rocketeer</span>
@@ -31,12 +36,10 @@
     <div id="stateDiv"></div>
     <button hidden id="resetButton" onclick="multiplier=1">reset</button>
     <br>
-    <br>
     <span>Multiplication Factor:&nbsp&nbsp</span><input id="exponent" type="number" value = "1.001">
     <br>
     <span>Escape Chance Per Tick:&nbsp</span><input id="flyChance" type="number" value = "0.001">
     <input hidden id="multiplyCheck" type="checkbox"><span hidden>multiply</span>
-    <br>
     <br>
     //todo: add graphics
 </div>
@@ -45,15 +48,12 @@
     <input id="bet" type="number" value = "1.00" max = "100.0" onchange="if(Number(this.value) > 100.0) this.value = 100.0" onkeyup="if(Number(this.value) > 100.0) this.value = 100.0">
     <button onclick="increDecrementButtonAction(0.1, 0, 100)">+</button>
     <br>
-    <br>
     <button onclick="document.getElementById('bet').value = '1.00'">1</button>
     <button onclick="document.getElementById('bet').value = '2.00'">2</button>
     <button onclick="document.getElementById('bet').value = '5.00'">5</button>
     <button onclick="document.getElementById('bet').value = '10.00'">10</button>
     <br>
-    <br>
     <button id="placeBet" onclick="placeBetButtonAction()"></button>
-    <br>
     <br>
     //todo: add second bet option
 </div>
