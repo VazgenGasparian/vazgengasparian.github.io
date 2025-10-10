@@ -1,0 +1,19 @@
+div {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+body {
+    font-family: Consolas;
+    margin:0px;
+    font-size: xx-large;
+}
+button {
+    font-family: Consolas;
+    font-size: xx-large;
+    padding:5px 25px 5px 25px;
+}
+input {
+    font-family: Consolas;
+    font-size: xx-large;
+}

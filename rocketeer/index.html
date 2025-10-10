@@ -3,161 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Rocketeer</title>
-    <style>
-        div {
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-        }
-        body {
-            font-family: Consolas;
-            margin:0px;
-            font-size: xx-large;
-        }
-        button {
-            font-family: Consolas;
-            font-size: xx-large;
-            padding:5px 25px 5px 25px;
-        }
-        input {
-            font-family: Consolas;
-            font-size: xx-large;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="index.css"/>
 </head>
 <body>
-
-<div style="position:absolute;left:0px;top:0px;border: 2px solid black;height:10%;width:100%;  padding:15px">
-    <span>Rocketeer</span>
-    <span style="float:right">Balance: <input id="balance" disabled type="number" value = "3000.00"><span>&nbspUSD</span></span>
-</div>
-<div style="position:absolute;top:10%;width:30%;height:90%;border: 2px solid black; padding:15px">
-    //todo: add other players
-</div>
-<div style="position:absolute;top:10%;left:30%;width:70%;height:70%;border: 2px solid black; padding:15px">
-    <span style="font-size: xxx-large;" id="multiplierDiv"></span>
-    <br>
-    <br>
-    <div style="height:10px; width:200px; background-color:black; outline: 2px solid black">
-        <div id="countDownDiv" style="height:100%; width:100%; background-color:green"></div>
+    <div style="position:absolute;left:0px;top:0px;border: 2px solid black;height:10%;width:100%;  padding:15px">
+        <span>Rocketeer</span>
+        <span style="float:right">Balance: <input id="balance" disabled type="number" value = "3000.00"><span>&nbspUSD</span></span>
     </div>
-    <br>
-    <div  style="font-size: xxx-large;" id="stateDiv"></div>
-    <button hidden id="resetButton" onclick="multiplier=1">reset</button>
-    <br>
-    <span>Multiplication Factor:&nbsp&nbsp</span><input id="exponent" type="number" value = "1.001">
-    <br>
-    <span>Escape Chance Per Tick:&nbsp</span><input id="flyChance" type="number" value = "0.001">
-    <input hidden id="multiplyCheck" type="checkbox"><span hidden>multiply</span>
-    <br>
-    //todo: add graphics
-</div>
-<div style="position:absolute;top:80%;left:30%;width:70%;height:20%;border: 2px solid black; padding:15px">
-    <button onclick="increDecrementButtonAction(-0.1, 0, 100)">-</button>
-    <input id="bet" type="number" value = "1.00" max = "100.0" onchange="if(Number(this.value) > 100.0) this.value = 100.0" onkeyup="if(Number(this.value) > 100.0) this.value = 100.0">
-    <button onclick="increDecrementButtonAction(0.1, 0, 100)">+</button>
-    <br>
-    <button onclick="document.getElementById('bet').value = '1.00'">1</button>
-    <button onclick="document.getElementById('bet').value = '2.00'">2</button>
-    <button onclick="document.getElementById('bet').value = '5.00'">5</button>
-    <button onclick="document.getElementById('bet').value = '10.00'">10</button>
-    <br>
-    <button id="placeBet" onclick="placeBetButtonAction()"></button>    //todo: add second bet option
-
-</div>
+    <div style="position:absolute;top:10%;width:30%;height:90%;border: 2px solid black; padding:15px">
+        //todo: add other players
+    </div>
+    <div style="position:absolute;top:10%;left:30%;width:70%;height:70%;border: 2px solid black; padding:15px">
+        <span style="font-size: xxx-large;" id="multiplierDiv"></span>
+        <br>
+        <br>
+        <div style="height:10px; width:200px; background-color:black; outline: 2px solid black">
+            <div id="countDownDiv" style="height:100%; width:100%; background-color:green"></div>
+        </div>
+        <br>
+        <div  style="font-size: xxx-large;" id="stateDiv"></div>
+        <br>
+        <span>Multiplication Factor:&nbsp&nbsp</span><input id="exponent" type="number" value = "1.001">
+        <br>
+        <span>Escape Chance Per Tick:&nbsp</span><input id="flyChance" type="number" value = "0.001">
+        <input hidden id="multiplyCheck" type="checkbox"><span hidden>multiply</span>
+        <br>
+        //todo: add graphics
+    </div>
+    <div style="position:absolute;top:80%;left:30%;width:70%;height:20%;border: 2px solid black; padding:15px">
+        <button onclick="increDecrementButtonAction(-0.1, 0, 100)">-</button>
+        <input id="bet" type="number" value = "1.00" max = "100.0" onchange="if(Number(this.value) > 100.0) this.value = 100.0" onkeyup="if(Number(this.value) > 100.0) this.value = 100.0">
+        <button onclick="increDecrementButtonAction(0.1, 0, 100)">+</button>
+        <br>
+        <button onclick="setBetValue(1.00)">1</button>
+        <button onclick="setBetValue(2.00)">2</button>
+        <button onclick="setBetValue(5.00)">5</button>
+        <button onclick="setBetValue(10.00)">10</button>
+        <button onclick="setBetValue(100.00)">100</button>
+        <br>
+        <button id="placeBet" onclick="placeBetButtonAction()"></button>    //todo: add second bet option
+    </div>
 </body>
-
-<script>
-    window.state = 'waiting';
-    window.countDownTime = 5;
-    window.countDownTimer = window.countDownTime;
-    window.placedBet = 0;
-    window.playingBet = 0;
-    window.multiplier = 1;
-
-    window.increDecrementButtonAction = (amount, min, max) => {
-        let val = Number(document.getElementById('bet').value);
-        val+=amount;
-        if(val < min) val = min;
-        if(val > max) val = max;
-        val = val.toFixed(2);
-        document.getElementById('bet').value = val;
-    }
-
-    window.placeBetButtonAction = () => {
-        if(window.playingBet === 0) {
-            if(window.placedBet === 0){
-                window.placedBet = Math.min(Number(document.getElementById('balance').value), Number(document.getElementById('bet').value));
-                document.getElementById('balance').value = (Math.max(document.getElementById('balance').value - document.getElementById('bet').value,0)).toFixed(2);
-
-            } else {
-                document.getElementById('balance').value = (Number(document.getElementById('balance').value) + window.placedBet).toFixed(2);
-                window.placedBet = 0;
-            }
-        } else {
-            document.getElementById('balance').value = (Number(document.getElementById('balance').value) + window.playingBet * multiplier).toFixed(2);
-            window.playingBet = 0;
-        }
-    }
-
-
-    setInterval(()=> {
-        const multiplierDiv = document.getElementById('multiplierDiv');
-        multiplierDiv.innerText = ''+multiplier.toFixed(2)+'x';
-    }, 100);
-
-    let lastFrameTime = performance.now();
-    const loop = function() {
-        if(document.getElementById('multiplyCheck').checked){
-            multiplier *= document.getElementById('exponent').value;
-        }
-        document.getElementById('countDownDiv').style.width = (countDownTimer/countDownTime*100)+'%';
-        document.getElementById('stateDiv').innerText = window.state;
-        document.getElementById('placeBet').innerText = (window.playingBet === 0)
-            ? (            (window.placedBet===0)
-                    ? 'Bet ' +document.getElementById('bet').value+' USD'
-                    : 'Cancel'
-            )
-            : (
-                'Cash Out ' +(playingBet * multiplier).toFixed(2) +' USD'
-            )
-
-        const currentTime = performance.now();
-        const deltaTime = (currentTime - lastFrameTime) / 1000;
-        lastFrameTime = currentTime;
-
-        switch (window.state) {
-            case 'waiting':
-                window.countDownTimer -= deltaTime;
-                if (window.countDownTimer <= 0) {
-                    window.countDownTimer = 0;
-                    window.playingBet = window.placedBet;
-                    window.placedBet = 0;
-                    window.state = 'flying';
-                }
-                break;
-            case 'flying':
-                document.getElementById('multiplyCheck').checked = true;
-                if (Math.random() < Number(document.getElementById('flyChance').value)) {
-                    window.state = 'escaped';
-                    window.playingBet = 0;
-                    window.escapedTimer = 3;
-
-                }
-                break;
-            case 'escaped':
-                document.getElementById('multiplyCheck').checked = false;
-                window.escapedTimer -= deltaTime;
-                if (window.escapedTimer <= 0) {
-                    window.countDownTimer = window.countDownTime;
-                    document.getElementById('resetButton').click();
-                    window.state = 'waiting';
-                }
-                break;
-        }
-        window.requestAnimationFrame(loop);
-    }
-    window.requestAnimationFrame(loop);
-
-</script>
+<script src="index.js"></script>
 </html>
