@@ -7,8 +7,8 @@
 </head>
 <body>
     <div style="position:absolute;left:0px;top:0px;border: 2px solid black;height:10%;width:100%;  padding:15px">
-        <span  style="font-size: xxx-large;">Rocketeer</span>
-        <span style="float:right">Balance: <input id="balance" disabled type="number" value = "3000.00"><span>&nbspUSD</span></span>
+        <span  style="font-size: xxx-large;">Rocketeer</span><span>//todo: improve UI</span>
+        <span style="float:right">Balance: <input style="width:5em" id="balance" disabled type="number" value = "3000.00"><span>&nbspUSD</span></span>
     </div>
     <div style="position:absolute;top:10%;width:30%;height:90%;border: 2px solid black; padding:15px">
         //todo: add other players
@@ -23,16 +23,16 @@
         <br>
         <div  style="font-size: xxx-large;" id="stateDiv"></div>
         <br>
-        <span>Multiplication Factor:&nbsp&nbsp</span><input id="exponent" type="number" value = "1.001">
+        <span>Multiplication Factor:&nbsp&nbsp</span><input style="width:4em" id="exponent" type="number" value = "1.001">
         <br>
-        <span>Escape Chance Per Tick:&nbsp</span><input id="flyChance" type="number" value = "0.001">
+        <span>Escape Chance Per Tick:&nbsp</span><input style="width:4em" id="flyChance" type="number" value = "0.001">
         <input hidden id="multiplyCheck" type="checkbox"><span hidden>multiply</span>
         <br>
         //todo: add graphics
     </div>
     <div style="position:absolute;top:80%;left:30%;width:70%;height:20%;border: 2px solid black; padding:15px">
         <button onclick="increDecrementButtonAction(-0.1, 0, 100)">-</button>
-        <input id="bet" type="number" value = "1.00" max = "100.0" onchange="if(Number(this.value) > 100.0) this.value = 100.0" onkeyup="if(Number(this.value) > 100.0) this.value = 100.0">
+        <input style="width:4em" id="bet" type="number" value = "1.00" max = "100.0" onchange="if(Number(this.value) > 100.0) this.value = 100.0" onkeyup="if(Number(this.value) > 100.0) this.value = 100.0">
         <button onclick="increDecrementButtonAction(0.1, 0, 100)">+</button>
         <br>
         <button onclick="setBetValue(1.00)">1</button>
